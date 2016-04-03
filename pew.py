@@ -4,21 +4,21 @@
 #
 # Copyright (C) 2012 Chris Smith <crsmithdev@gmail.com>
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
 # software and associated documentation files (the "Software"), to deal in the Software
-# without restriction, including without limitation the rights to use, copy, modify, 
-# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-# permit persons to whom the Software is furnished to do so, subject to the following 
+# without restriction, including without limitation the rights to use, copy, modify,
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to the following
 # conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies 
+# The above copyright notice and this permission notice shall be included in all copies
 # or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 #---------------------------------------------------------------------------------------
@@ -163,7 +163,7 @@ class Pew(object):
 
 		elif has_value:
 			return self._parse_value(node.text), node.tag
-		
+
 		return None, node.tag
 
 	def _parse_value(self, value):
@@ -184,7 +184,11 @@ class Pew(object):
 	# Misc. methods.
 
 	def _join(self, lst):
-		return ','.join([str(i) for i in lst])
+
+		if type(lst) == 'list':
+			return ','.join([str(i) for i in lst])
+		else:
+			return lst
 
 	# Account API methods.
 
@@ -197,10 +201,12 @@ class Pew(object):
 	# Character API Methods
 
 	def char_account_balance(self, character_id):
-		return self._char_request(self._CHAR_TYPE, 'accountBalance', character_id)
+		return self._char_request(self._CHAR_TYPE,'AccountBalance', character_id)
 
-	def char_asset_list(self, character_id):
+	def char_asset_list(self, character_id, flat=0):
+		self._params['flat'] = self._join(flat)
 		return self._char_request(self._CHAR_TYPE,'assetList', character_id)
+
 
 	def char_calendar_event_attendees(self, character_id, event_ids):
 		self._params['eventIds'] = self._join(event_ids)
@@ -249,6 +255,13 @@ class Pew(object):
 
 	def char_npc_standings(self, character_id):
 		return self._char_request(self._CHAR_TYPE, 'standings', character_id)
+
+	def char_planetary_colonies(self, character_id):
+		return self._char_request(self._CHAR_TYPE, 'planetaryColonies', character_id)
+
+	def char_planetary_pins(self, character_id, planet_id):
+		self._params['planetID'] = planet_id
+		return self._char_request(self._CHAR_TYPE, 'planetaryPins', character_id)
 
 	def char_research(self, character_id):
 		return self._char_request(self._CHAR_TYPE, 'research', character_id)
