@@ -36,7 +36,7 @@
 
 from urllib import urlencode
 from urllib2 import urlopen, URLError
-from elementtree import ElementTree
+import xml.etree.ElementTree as ET
 
 class PewApiObject(object):
 
@@ -134,7 +134,7 @@ class Pew(object):
 
 	def _parse_xml(self, xml):
 
-		tree = ElementTree.fromstring(xml)
+		tree = ET.fromstring(xml)
 
 		return self._r_parse_xml(tree)[0]
 
