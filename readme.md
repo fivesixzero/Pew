@@ -1,4 +1,4 @@
-Pew 
+Pew
 ==============
 > Pew is a simple, lightweight Python wrapper for the EVE Online API.
 
@@ -38,5 +38,7 @@ result = pew.acct_characters()
 Notes
 =====
 
-* Some tests may not pass depending on the credentials you provide, their permissions and
-other factors (e.g., being in an NPC corp will cause most corp tests to fail).
+* Some tests may not pass depending on the credentials you provide, their permissions and other factors (e.g., being in an NPC corp will cause most corp tests to fail).
+
+* This project was last updated by its original author in 2012. It was forked and picked up for updating in April 2016. Currently it is functional for most API endpoints but fails on some - work is being done to resolve this.
+

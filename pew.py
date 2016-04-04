@@ -198,6 +198,9 @@ class Pew(object):
 	def acct_status(self):
 		return self._auth_request(self._ACCT_TYPE, 'accountStatus')
 
+	def acct_api_key_info(self):
+		return self._auth_request(self._ACCT_TYPE, 'APIKeyInfo')
+
 	# Character API Methods
 
 	def char_account_balance(self, character_id):
@@ -206,7 +209,6 @@ class Pew(object):
 	def char_asset_list(self, character_id, flat=0):
 		self._params['flat'] = self._join(flat)
 		return self._char_request(self._CHAR_TYPE,'assetList', character_id)
-
 
 	def char_calendar_event_attendees(self, character_id, event_ids):
 		self._params['eventIds'] = self._join(event_ids)
