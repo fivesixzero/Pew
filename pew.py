@@ -73,6 +73,7 @@ class PewConnectionError(PewError):
 
 class Pew(object):
 
+	_API_TYPE = 'api'
 	_CORP_TYPE = 'corp'
 	_CHAR_TYPE = 'char'
 	_ACCT_TYPE = 'account'
@@ -189,6 +190,11 @@ class Pew(object):
 			return ','.join([str(i) for i in lst])
 		else:
 			return lst
+
+	# API API methods.
+
+	def api_call_list(self):
+		return self._auth_request(self._API_TYPE, 'CallList')
 
 	# Account API methods.
 
