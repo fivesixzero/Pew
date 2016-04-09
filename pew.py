@@ -120,7 +120,7 @@ class Pew(object):
 			return result
 
 		except URLError as er:
-			raise PewConnectionError(str(er))
+			raise PewConnectionError(str('url: ' + str(url) + ' || error: ' + str(er)))
 
 	def _build_url(self, api_type, method_name):
 
@@ -397,6 +397,10 @@ class Pew(object):
 
 	def eve_skill_tree(self):
 		return self._request(self._EVE_TYPE, 'skilltree')
+
+	def eve_type_name(self, ids):
+		self._params['ids'] = self._join(ids)
+		return self._request(self._EVE_TYPE, 'typeName')
 
 	# Maps API methods.
 
