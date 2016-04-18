@@ -267,9 +267,17 @@ class Pew(object):
 	def char_planetary_colonies(self, character_id):
 		return self._char_request(self._CHAR_TYPE, 'planetaryColonies', character_id)
 
+	def char_planetary_links(self, character_id, planet_id):
+		self._params['planetID'] = planet_id
+		return self._char_request(self._CHAR_TYPE, 'planetaryLinks', character_id)
+
 	def char_planetary_pins(self, character_id, planet_id):
 		self._params['planetID'] = planet_id
 		return self._char_request(self._CHAR_TYPE, 'planetaryPins', character_id)
+
+	def char_planetary_routes(self, character_id, planet_id):
+		self._params['planetID'] = planet_id
+		return self._char_request(self._CHAR_TYPE, 'PlanetaryRoutes', character_id)
 
 	def char_research(self, character_id):
 		return self._char_request(self._CHAR_TYPE, 'research', character_id)
