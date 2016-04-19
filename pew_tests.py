@@ -408,7 +408,7 @@ class PewCorpTests(PewTest):
 	def test_corp_contact_list(self):
 
 		result = self.pewCorp.corp_contact_list(CHAR_ID_CORP)
-		self.assertHasMember(result, 'contactList')
+		self.assertHasMember(result, 'corporateContactList')
 
 	def test_corp_factional_warfare_statistics(self):
 
@@ -433,17 +433,17 @@ class PewCorpTests(PewTest):
 	def test_corp_medals(self):
 
 		result = self.pewCorp.corp_medals(CHAR_ID_CORP)
-		self.assertHasMember(result, 'currentCorporation')
+		self.assertHasMember(result, 'medals')
 
 	def test_corp_npc_standings(self):
 
 		result = self.pewCorp.corp_npc_standings(CHAR_ID_CORP)
-		self.assertHasMember(result, 'characterNPCStandings')
+		self.assertHasMember(result, 'corporationNPCStandings')
 
 	def test_corp_wallet_journal(self):
 
 		result = self.pewCorp.corp_wallet_journal(CHAR_ID_CORP)
-		self.assertHasMember(result, 'transactions')
+		self.assertHasMember(result, 'entries')
 
 	def test_corp_wallet_transactions(self):
 
