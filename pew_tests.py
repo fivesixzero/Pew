@@ -4,36 +4,49 @@ from pew import Pew, PewApiError, PewConnectionError
 
 import csv
 
-try:
-    apiCSV = open('.eve_apis', 'rb')
-except:
-    print ''
-    print 'CSV IMPORT FAILURE! Make sure .eve_apis exists here!'
-    print ''
-    print 'CSV format is: keyid,verification,nickname with a key on the first line'
-    print ''
-    raise
-    exit(1)
+CORP_CSV_ROW = 5	# What CSV row can we use for corp key testing?
+CHAR_CSV_ROW = 3	# What CSV row can we use for character key testing?
+CHAR_NUM = 0		# What character on that char key are we going to use?
 
-apiList = list(csv.reader(apiCSV, delimiter=',', quotechar='\''))
-apiCSV.close()
+# Grabs our key info from our CSV, returns a pew object and a character ID
 
-API_ID = apiList[1][0]
-API_KEY = apiList[1][1]
+def csvPicker(CSV_ROW_IN,CHAR_NUM_IN = None):
 
-pew = Pew(API_ID,API_KEY)
+	try:
+    		apiCSV = open('.eve_apis', 'rb')
+	except:
+	    	print ''
+	    	print 'CSV IMPORT FAILURE! Make sure .eve_apis exists here!'
+	    	print ''
+	    	print 'CSV format is: keyid,verification,nickname with a key on the first line'
+	    	print ''
+	    	raise
+	    	exit(1)
 
-chars = pew.acct_characters()
+	apiList = list(csv.reader(apiCSV, delimiter=',', quotechar='\''))
+	apiCSV.close()
 
-CHAR_ID = chars.characters[0].characterID
+	API_ID = apiList[CSV_ROW_IN][0]
+	API_KEY = apiList[CSV_ROW_IN][1]
 
-del chars
-del pew
+	pew = Pew(API_ID,API_KEY)
+
+	chars = pew.acct_characters()
+	CHAR = CHAR_NUM
+	CHAR_ID = chars.characters[CHAR].characterID
+	del chars
+
+	return pew, CHAR_ID
+
+# end CSV setup
 
 class PewTest(unittest.TestCase):
 
 	def setUp(self):
-		self.pew = Pew(API_ID, API_KEY)
+		global CHAR_ID
+		global CHAR_ID_CORP
+		self.pew, CHAR_ID = csvPicker(CHAR_CSV_ROW,CHAR_NUM)
+		self.pewCorp, CHAR_ID_CORP = csvPicker(CORP_CSV_ROW,0)
 
 	def assertHasMember(self, obj, member_name):
 		self.assertTrue(member_name in obj.__dict__)
@@ -293,7 +306,7 @@ class PewEveTests(PewTest):
 
 	def test_eve_character_name(self):
 
-		result = self.pew.eve_character_name([91399947])
+		result = self.pew.eve_character_name(CHAR_ID)
 		self.assertHasMember(result, 'characters')
 
 	def test_eve_conquerable_station_list(self):
@@ -359,57 +372,57 @@ class PewCorpTests(PewTest):
 
 	def test_corp_account_balance(self):
 
-		result = self.pew.corp_account_balance(CHAR_ID)
+		result = self.pewCorp.corp_account_balance(CHAR_ID_CORP)
 		self.assertHasMember(result, 'accounts')
 
 	def test_corp_asset_list(self):
 
-		result = self.pew.corp_asset_list(CHAR_ID)
+		result = self.pewCorp.corp_asset_list(CHAR_ID_CORP)
 		self.assertHasMember(result, 'assets')
 
 	def test_corp_contact_list(self):
 
-		result = self.pew.corp_contact_list(CHAR_ID)
+		result = self.pewCorp.corp_contact_list(CHAR_ID_CORP)
 		self.assertHasMember(result, 'contactList')
 
 	def test_corp_factional_warfare_statistics(self):
 
-		result = self.pew.corp_factional_warfare_statistics(CHAR_ID)
+		result = self.pewCorp.corp_factional_warfare_statistics(CHAR_ID_CORP)
 		self.assertHasMember(result, 'factionID')
 
 	def test_corp_industry_jobs(self):
 
-		result = self.pew.corp_industry_jobs(CHAR_ID)
+		result = self.pewCorp.corp_industry_jobs(CHAR_ID_CORP)
 		self.assertHasMember(result, 'jobs')
 
 	def test_corp_kill_log(self):
 
-		result = self.pew.corp_kill_log(CHAR_ID)
+		result = self.pewCorp.corp_kill_log(CHAR_ID_CORP)
 		self.assertHasMember(result, 'kills')
 
 	def test_corp_market_orders(self):
 
-		result = self.pew.corp_market_orders(CHAR_ID)
+		result = self.pewCorp.corp_market_orders(CHAR_ID_CORP)
 		self.assertHasMember(result, 'orders')
 
 	def test_corp_medals(self):
 
-		result = self.pew.corp_medals(CHAR_ID)
+		result = self.pewCorp.corp_medals(CHAR_ID_CORP)
 		self.assertHasMember(result, 'currentCorporation')
 
 	def test_corp_npc_standings(self):
 
-		result = self.pew.corp_npc_standings(CHAR_ID)
+		result = self.pewCorp.corp_npc_standings(CHAR_ID_CORP)
 		self.assertHasMember(result, 'characterNPCStandings')
 
 	def test_corp_wallet_journal(self):
 
-		result = self.pew.corp_wallet_journal(CHAR_ID)
+		result = self.pewCorp.corp_wallet_journal(CHAR_ID_CORP)
 		self.assertHasMember(result, 'transactions')
 
 	def test_corp_wallet_transactions(self):
 
-		result = self.pew.corp_wallet_transactions(CHAR_ID)
+		result = self.pewCorp.corp_wallet_transactions(CHAR_ID_CORP)
 		self.assertHasMember(result, 'transactions')
 
 if __name__ == "__main__":
