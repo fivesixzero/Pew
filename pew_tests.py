@@ -219,7 +219,7 @@ class PewCharacterTests(PewTest):
 
 	def test_char_mail_bodies(self):
 
-		result = self.pew.char_mail_bodies(CHAR_ID, ['123'])
+		result = self.pew.char_mail_bodies(CHAR_ID, '123')
 		self.assertHasMember(result, 'messages')
 
 	def test_char_mail_messages(self):
@@ -239,7 +239,7 @@ class PewCharacterTests(PewTest):
 
 	def test_char_notification_texts(self):
 
-		result = self.pew.char_notification_texts(CHAR_ID, ['123'])
+		result = self.pew.char_notification_texts(CHAR_ID, '123')
 		self.assertHasMember(result, 'notifications')
 
 	def test_char_notifications(self):
@@ -251,6 +251,26 @@ class PewCharacterTests(PewTest):
 
 		result = self.pew.char_npc_standings(CHAR_ID)
 		self.assertHasMember(result, 'characterNPCStandings')
+
+	def test_char_planetary_colonies(self):
+
+		result = self.pew.char_planetary_colonies(CHAR_ID)
+		self.assertHasMember(result, 'colonies')
+
+	def test_char_planetary_links(self):
+
+		result = self.pew.char_planetary_links(CHAR_ID, '123')
+		self.assertHasMember(result, 'links')
+
+	def test_char_planetary_pins(self):
+
+		result = self.pew.char_planetary_pins(CHAR_ID, '123')
+		self.assertHasMember(result, 'pins')
+
+	def test_char_planetary_routes(self):
+
+		result = self.pew.char_planetary_routes(CHAR_ID, '123')
+		self.assertHasMember(result, 'routes')
 
 	def test_char_research(self):
 
@@ -296,7 +316,7 @@ class PewEveTests(PewTest):
 
 	def test_eve_character_id(self):
 
-		result = self.pew.eve_character_id(['test'])
+		result = self.pew.eve_character_id('test')
 		self.assertHasMember(result, 'characters')
 
 	def test_eve_character_info(self):
@@ -367,6 +387,11 @@ class PewMiscTests(PewTest):
 
 		result = self.pew.misc_server_status()
 		self.assertHasMember(result, 'serverOpen')
+
+	def test_misc_call_list(self):
+
+		result = self.pew.misc_call_list()
+		self.assertHasMember(result, 'callGroups')
 
 class PewCorpTests(PewTest):
 

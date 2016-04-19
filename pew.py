@@ -209,15 +209,10 @@ class Pew(object):
 
 	def _join(self, lst):
 
-		if type(lst) == 'list':
+		if type(lst) is list:
 			return ','.join([str(i) for i in lst])
 		else:
-			return lst
-
-	# API API methods.
-
-	def api_call_list(self):
-		return self._auth_request(self._API_TYPE, 'CallList')
+			return str(lst) # we want to return original in string form if its not a list
 
 	# Account API methods.
 
@@ -451,3 +446,6 @@ class Pew(object):
 
 	def misc_server_status(self):
 		return self._request('server', 'serverstatus')
+
+	def misc_call_list(self):
+		return self._auth_request(self._API_TYPE, 'CallList')
