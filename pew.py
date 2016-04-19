@@ -23,6 +23,14 @@
 #
 #---------------------------------------------------------------------------------------
 #
+# Version 1.2 - April 19th, 2016
+#  - Fixed/updated several broken unit tests
+#  - Built .eve_apis CSV key loading into unit tests, replaced static data where possible
+#  - Fixed a few minor issues found by unit tests
+#     - rewrote a bit of _join() to handle all lists properly
+#  - Moved api_call_list to misc_call_list
+#  - Added misc_call_list and all four planetary calls to unit tests
+#
 # Version 1.1 - April 18th, 2016
 #  - Updated imports to use modern ElementTree
 #  - Fixed _join() method, which couldn't handle non-list items
@@ -40,12 +48,27 @@
 # Version 1.0 - July 4th, 2012
 #  - Initial release
 #
-# Todo:
+# Todos:
 #  - Add character / corp / alliance image method (server down at time of writing)
-#  - Add and test any missing endpoints in API doc
-#  - Add (optional?) caching to match timeouts in API doc
-#  - Fix problems indicated in newly-fixed unit test
-#  - Add unit tests to handle newly added API methods
+#  - Add (optional?) caching to match timeouts in API doc (maybe in raw_request?)
+#  - Add and test any missing endpoints [list of missing items from misc_call_list() below]
+#     - Character ChatChannels
+#     - Character Bookmarks
+#     - Character Locations
+#     - Character Contracts
+#     - Corporation Bookmarks
+#     - Corporation MemberTrackingExtended
+#     - Corporation MemberTrackingLimited
+#     - Corporation Locations
+#     - Corporation Contracts
+#  - Fix broken endpoints
+#     - Corporation KillLog * BROKEN (httplib.BadStatusLine: HTTP/1.1 000)
+#     - Corporation FacWarStats * BROKEN (HTTP Error 400: Bad Request)
+#
+# Completed Todos:
+#
+#  - Fix problems indicated in newly-fixed unit test [DONE 4/19]
+#  - Add unit tests to handle newly added API methods [DONE 4/19]
 #
 # Requirements:
 #  - Python 2.7
@@ -130,11 +153,6 @@ class Pew(object):
 		return self._handle_result(result)
 
 	def _raw_request(self, url):
-
-		# note: might be easiest to add caching here... like this?
-		#
-		# if (cached):
-		# 	return (cached result)
 
 		try:
 			response = urlopen(url)
