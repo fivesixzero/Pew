@@ -23,11 +23,29 @@
 #
 #---------------------------------------------------------------------------------------
 #
+# Version 1.1 - April 18th, 2016
+#  - Updated imports to use modern ElementTree
+#  - Fixed _join() method, which couldn't handle non-list items
+#  - Added all four modern planetary interaction endpoints
+#  - Added __init.py__ to allow easy importing
+#  - Improved error message output on API failure (URLerror)
+#  - Added eve_type_name() for XML API lookup of typeNames via typeIDs
+#  - Added api_call_list() for XML API listing of API endpoints
+#  - Added acct_api_key_info() for XML API info on the provided API key
+#  - Fixed char_account_balance() by updating endpoint name
+#  - Improived char_asset_list() to allow optional "flat" mode provided in API
+#  - Added CSV API key value input to pew_tests.py to avoid storing key value
+#  - Added .eve_apis to .gitignore
+#
 # Version 1.0 - July 4th, 2012
 #  - Initial release
 #
 # Todo:
 #  - Add character / corp / alliance image method (server down at time of writing)
+#  - Add and test any missing endpoints in API doc
+#  - Add (optional?) caching to match timeouts in API doc
+#  - Fix problems indicated in newly-fixed unit test
+#  - Add unit tests to handle newly added API methods
 #
 # Requirements:
 #  - Python 2.7
@@ -112,6 +130,11 @@ class Pew(object):
 		return self._handle_result(result)
 
 	def _raw_request(self, url):
+
+		# note: might be easiest to add caching here... like this?
+		#
+		# if (cached):
+		# 	return (cached result)
 
 		try:
 			response = urlopen(url)

@@ -2,9 +2,33 @@ import unittest, urllib, sys
 
 from pew import Pew, PewApiError, PewConnectionError
 
-CHAR_ID = 91399947
-API_ID = 286212
-API_KEY = '62aEKRovi2qlI4yE1HErDy8us5BAY0fLcawQHXxfIV7xFsYVo0LqB5lppco0nNS9'
+import csv
+
+try:
+    apiCSV = open('.eve_apis', 'rb')
+except:
+    print ''
+    print 'CSV IMPORT FAILURE! Make sure .eve_apis exists here!'
+    print ''
+    print 'CSV format is: keyid,verification,nickname with a key on the first line'
+    print ''
+    raise
+    exit(1)
+
+apiList = list(csv.reader(apiCSV, delimiter=',', quotechar='\''))
+apiCSV.close()
+
+API_ID = apiList[1][0]
+API_KEY = apiList[1][1]
+
+pew = Pew(API_ID,API_KEY)
+
+chars = pew.acct_characters()
+
+CHAR_ID = chars.characters[0].characterID
+
+del chars
+del pew
 
 class PewTest(unittest.TestCase):
 
@@ -394,7 +418,7 @@ if __name__ == "__main__":
 	runner = unittest.TextTestRunner(verbosity=2)
 	suite = None
 	tests = None
-	
+
 	if len(sys.argv) < 2:
 		tests = 'all'
 	else:
