@@ -126,6 +126,8 @@ class Pew(object):
 		self.api_id = api_id
 		self.api_key = api_key
 		self.api_url = 'https://api.eveonline.com'
+		self.emd_url = 'http://eve-marketdata.com/api'
+		self.emd_charname = 'demo' # maybe require this in the future...
 		self._params = {}
 
 	# Request methods.
@@ -143,9 +145,18 @@ class Pew(object):
 
 		return self._request(api_type, method_name)
 
+	def _emd_request(self, api_type, method_name):
+
+		self._params['char_name'] = self.emd_charname
+
+		return self._request(api_type, method_name)
+
 	def _request(self, api_type, method_name):
 
-		url = self._build_url(api_type, method_name)
+		if api_type == 'emd':
+			url = self._build_emd_url(method_name)
+		else:
+			url = self._build_url(api_type, method_name)
 		self._params.clear()
 
 		result = self._raw_request(url)
@@ -166,6 +177,15 @@ class Pew(object):
 	def _build_url(self, api_type, method_name):
 
 		url = '%s/%s/%s.xml.aspx' % (self.api_url, api_type, method_name)
+
+		if len(self._params) > 0:
+			url = '%s?%s' % (url, urlencode(self._params))
+
+		return url
+
+	def _build_emd_url(self, method_name):
+
+		url = '%s/%s.xml' % (self.emd_url, method_name)
 
 		if len(self._params) > 0:
 			url = '%s?%s' % (url, urlencode(self._params))
@@ -231,6 +251,47 @@ class Pew(object):
 			return ','.join([str(i) for i in lst])
 		else:
 			return str(lst) # we want to return original in string form if its not a list
+
+	# eve-marketdata.com API methods -- EXPERIMENTAL
+
+	# usage: emd = emd_item_orders(b os s or a, region_ids list or None, solarsystem_ids or None, station_ids or None)
+	def emd_item_prices(self, buysell, type_ids, marketgroup_ids = None, region_ids = None, solarsystem_ids = None, station_ids = None):
+		self._params['buysell'] = buysell
+		self._params['type_ids'] = self._join(type_ids)
+		if marketgroup_ids is not None:
+			self._params['marketgroup_ids'] = self._join(marketgroup_ids)
+		if region_ids is not None:
+			self._params['region_ids'] = self._join(region_ids)
+		if solarsystem_ids is not None:
+			self._params['solarsystem_ids'] = self._join(solarsystem_ids)
+		if station_ids is not None:
+			self._params['station_ids'] = self._join(station_ids)
+		return self._emd_request('emd', 'item_prices2')
+
+	def emd_item_orders(self, buysell, minmax, type_ids, marketgroup_ids = None, region_ids = None, solarsystem_ids = None, station_ids = None):
+		self._params['buysell'] = buysell
+		self._params['minmax'] = minmax
+		self._params['type_ids'] = self._join(type_ids)
+		if marketgroup_ids is not None:
+			self._params['marketgroup_ids'] = self._join(marketgroup_ids)
+		if region_ids is not None:
+			self._params['region_ids'] = self._join(region_ids)
+		if solarsystem_ids is not None:
+			self._params['solarsystem_ids'] = self._join(solarsystem_ids)
+		if station_ids is not None:
+			self._params['station_ids'] = self._join(station_ids)
+		return self._emd_request('emd', 'item_orders2')
+
+	''' # This is non-functional at the moment - guessing eve-marketdata may have issues returning valid xml?
+	def emd_item_history(self, type_ids, days = '30', marketgroup_ids = None, region_ids = None):
+		self._params['type_ids'] = self._join(type_ids)
+		self._params['days'] = days
+		if marketgroup_ids is not None:
+			self._params['marketgroup_ids'] = self._join(marketgroup_ids)
+		if region_ids is not None:
+			self._params['region_ids'] = self._join(region_ids)
+		return self._emd_request('emd', 'item_history2')
+	'''
 
 	# Account API methods.
 

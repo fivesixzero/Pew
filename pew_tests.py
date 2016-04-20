@@ -450,6 +450,25 @@ class PewCorpTests(PewTest):
 		result = self.pewCorp.corp_wallet_transactions(CHAR_ID_CORP)
 		self.assertHasMember(result, 'transactions')
 
+class PewEmdTests(PewTest):
+
+	def test_emd_item_prices(self):
+
+		result = self.pew.emd_item_prices('b','3465')
+		self.assertHasMember(result, 'item_prices')
+
+	def test_emd_item_orders(self):
+
+		result = self.pew.emd_item_orders('b','min','3465')
+		self.assertHasMember(result, 'orders')
+
+	''' # non-functional at the moment
+	def test_emd_history(self):
+
+		result = self.pew.emd_history('3465')
+		self.assertHasMember(result, 'history')
+	'''
+
 if __name__ == "__main__":
 
 	loader = unittest.TestLoader()
@@ -476,6 +495,8 @@ if __name__ == "__main__":
 		suite = loader.loadTestsFromTestCase(PewMiscTests)
 	if tests == 'account':
 		suite = loader.loadTestsFromTestCase(PewAccountTests)
+	if tests == 'emd':
+		suite = loader.loadTestsFromTestCase(PewEmdTests)
 	elif tests == 'all':
 		suite = unittest.TestSuite()
 
@@ -486,5 +507,6 @@ if __name__ == "__main__":
 		suite.addTests(loader.loadTestsFromTestCase(PewEveTests))
 		suite.addTests(loader.loadTestsFromTestCase(PewMapsTests))
 		suite.addTests(loader.loadTestsFromTestCase(PewMiscTests))
+		suite.addTests(loader.loadTestsFromTestCase(PewEmdTests))
 
 	runner.run(suite)
