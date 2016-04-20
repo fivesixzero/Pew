@@ -56,19 +56,23 @@
 #     - Character Bookmarks
 #     - Character Locations
 #     - Character Contracts
+#     - Character Killmails (vs killLogs, which don't work right)
 #     - Corporation Bookmarks
 #     - Corporation MemberTrackingExtended
 #     - Corporation MemberTrackingLimited
 #     - Corporation Locations
 #     - Corporation Contracts
-#  - Fix broken endpoints
-#     - Corporation KillLog * BROKEN (httplib.BadStatusLine: HTTP/1.1 000)
-#     - Corporation FacWarStats * BROKEN (HTTP Error 400: Bad Request)
+#     - Corporation Killmails (vs killLogs, which don't work right)
 #
 # Completed Todos:
 #
 #  - Fix problems indicated in newly-fixed unit test [DONE 4/19]
 #  - Add unit tests to handle newly added API methods [DONE 4/19]
+#  - Fix broken endpoints
+#     - Corporation KillLog * BROKEN (httplib.BadStatusLine: HTTP/1.1 000)
+#		 - This fails if called within cache timeout! killMails is better.
+#     - Corporation FacWarStats * BROKEN (HTTP Error 400: Bad Request)
+#		 - This was failing because corp key lacked FW status. Fixed with FW corp.
 #
 # Requirements:
 #  - Python 2.7
