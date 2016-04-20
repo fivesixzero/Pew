@@ -4,8 +4,8 @@ from pew import Pew, PewApiError, PewConnectionError
 
 import csv
 
-CORP_CSV_ROW = 5	# What CSV row can we use for corp key testing?
-CHAR_CSV_ROW = 3	# What CSV row can we use for character key testing?
+CORP_CSV_ROW = 8	# What CSV row can we use for corp key testing?
+CHAR_CSV_ROW = 6	# What CSV row can we use for character key testing?
 CHAR_NUM = 0		# What character on that char key are we going to use?
 
 # Grabs our key info from our CSV, returns a pew object and a character ID
@@ -102,6 +102,22 @@ class PewCoreTests(PewTest):
 		self.assertEqual(result.test[0].x, 1)
 		self.assertEqual(result.test[1].x, 2)
 
+	def test__build_url_emd_url(self):
+
+		api_type = 'emd'
+		expected = 'http://eve-marketdata.com/api/test.xml'
+
+		result = self.pew._build_url(api_type,'test')
+
+		self.assertEqual(result, expected)
+
+	def test__build_url_ecent_url(self):
+
+		api_type = 'ecent'
+		expected = 'http://api.eve-central.com/api/test'
+
+		result = self.pew._build_url(api_type,'test')
+
 	def test__build_url_appends_params(self):
 
 		params = {'a': 1, 'b': 2, 'c': 3}
@@ -148,6 +164,13 @@ class PewCoreTests(PewTest):
 		result = self.pew._join(lst)
 
 		self.assertEqual(result, '1,2,3')
+
+	def test__join_joins_single_var(self):
+
+		lst = 'test'
+		result = self.pew._join(lst)
+
+		self.assertEqual(result, 'test')
 
 	def test__request_bad_url_throws_error(self):
 
@@ -202,7 +225,9 @@ class PewCharacterTests(PewTest):
 		self.assertHasMember(result, 'contactNotifications')
 
 	def test_char_factional_warfare_statistics(self):
-		pass
+
+		result = self.pew.char_contact_notifications(CHAR_ID)
+		self.assertHasMember(result, 'factionName')
 
 	def test_char_industry_jobs(self):
 
@@ -210,7 +235,9 @@ class PewCharacterTests(PewTest):
 		self.assertHasMember(result, 'jobs')
 
 	def test_char_kill_log(self):
-		pass
+
+		result = self.pew.char_contact_notifications(CHAR_ID)
+		self.assertHasMember(result, 'kills')
 
 	def test_char_mailing_list(self):
 
@@ -461,13 +488,6 @@ class Pew3rdPartyTests(PewTest):
 
 		result = self.pew.emd_item_orders('b','min','3465')
 		self.assertHasMember(result, 'orders')
-
-	''' # non-functional at the moment
-	def test_emd_history(self):
-
-		result = self.pew.emd_history('3465')
-		self.assertHasMember(result, 'history')
-	'''
 
 if __name__ == "__main__":
 
