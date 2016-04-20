@@ -226,7 +226,7 @@ class PewCharacterTests(PewTest):
 
 	def test_char_factional_warfare_statistics(self):
 
-		result = self.pew.char_contact_notifications(CHAR_ID)
+		result = self.pew.char_factional_warfare_statistics(CHAR_ID)
 		self.assertHasMember(result, 'factionName')
 
 	def test_char_industry_jobs(self):
