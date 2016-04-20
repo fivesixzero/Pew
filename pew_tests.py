@@ -450,7 +450,7 @@ class PewCorpTests(PewTest):
 		result = self.pewCorp.corp_wallet_transactions(CHAR_ID_CORP)
 		self.assertHasMember(result, 'transactions')
 
-class PewEmdTests(PewTest):
+class Pew3rdPartyTests(PewTest):
 
 	def test_emd_item_prices(self):
 
@@ -495,8 +495,8 @@ if __name__ == "__main__":
 		suite = loader.loadTestsFromTestCase(PewMiscTests)
 	if tests == 'account':
 		suite = loader.loadTestsFromTestCase(PewAccountTests)
-	if tests == 'emd':
-		suite = loader.loadTestsFromTestCase(PewEmdTests)
+	if tests == '3p':
+		suite = loader.loadTestsFromTestCase(Pew3rdPartyTests)
 	elif tests == 'all':
 		suite = unittest.TestSuite()
 
@@ -507,6 +507,6 @@ if __name__ == "__main__":
 		suite.addTests(loader.loadTestsFromTestCase(PewEveTests))
 		suite.addTests(loader.loadTestsFromTestCase(PewMapsTests))
 		suite.addTests(loader.loadTestsFromTestCase(PewMiscTests))
-		suite.addTests(loader.loadTestsFromTestCase(PewEmdTests))
+		suite.addTests(loader.loadTestsFromTestCase(Pew3rdPartyTests))
 
 	runner.run(suite)
