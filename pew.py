@@ -51,23 +51,30 @@
 # Todos:
 #  - Add character / corp / alliance image method (server down at time of writing)
 #  - Add (optional?) caching to match timeouts in API doc (maybe in raw_request?)
-#  - Add and test any missing endpoints [list of missing items from misc_call_list() below]
+#  - Figure out a way to properly test the char_contracts_items function
+#  - Fix broken endpoints
+#     - Corporation Contracts
+#     - Corporation Contract Bids
+#     - Corporation Contract Items
+#  - Add and test any missing endpoints
 #     - Character ChatChannels
 #     - Character Bookmarks
 #     - Character Locations
-#     - Character Contracts
 #     - Character Killmails (vs killLogs, which don't work right)
 #     - Corporation Bookmarks
 #     - Corporation MemberTrackingExtended
 #     - Corporation MemberTrackingLimited
 #     - Corporation Locations
-#     - Corporation Contracts
 #     - Corporation Killmails (vs killLogs, which don't work right)
 #
 # Completed Todos:
 #
 #  - Fix problems indicated in newly-fixed unit test [DONE 4/19]
 #  - Add unit tests to handle newly added API methods [DONE 4/19]
+#  - Add and test any missing endpoints
+#     - Character Contracts
+#     - Character Contract Bids
+#     - Character Contract Items
 #  - Fix broken endpoints
 #     - Corporation KillLog * BROKEN (httplib.BadStatusLine: HTTP/1.1 000)
 #		 - This fails if called within cache timeout! killMails is better.
@@ -313,11 +320,25 @@ class Pew(object):
 	def char_contact_notifications(self, character_id):
 		return self._char_request(self._CHAR_TYPE,'contactNotifications', character_id)
 
+	def char_contracts(self, character_id, contract_id = None):
+		self._params['contractID'] = self._join(contract_id)
+		return self._char_request(self._CHAR_TYPE,'contracts', character_id)
+
+	def char_contract_bids(self, character_id):
+		return self._char_request(self._CHAR_TYPE,'contractBids', character_id)
+
+	def char_contract_items(self, character_id, contract_id):
+		self._params['contractID'] = self._join(contract_id)
+		return self._char_request(self._CHAR_TYPE,'contractItems', character_id)
+
 	def char_factional_warfare_statistics(self, character_id):
 		return self._char_request(self._CHAR_TYPE,'facWarStats', character_id)
 
 	def char_industry_jobs(self, character_id):
 		return self._char_request(self._CHAR_TYPE,'industryJobs', character_id)
+
+	def char_industry_job_history(self, character_id):
+		return self._char_request(self._CHAR_TYPE,'industryJobHistory', character_id)
 
 	def char_kill_log(self, character_id):
 		return self._char_request(self._CHAR_TYPE,'killLog', character_id)
@@ -394,6 +415,17 @@ class Pew(object):
 
 	def corp_container_log(self, character_id):
 		return self._char_request(self._CORP_TYPE, 'containerlog', character_id)
+
+	#def corp_contracts(self, character_id, contract_id = None):
+	#	self._params['contractID'] = self._join(contract_id)
+	#	return self._char_request(self._CORP_TYPE,'contracts', character_id)
+
+	#def corp_contract_bids(self, character_id):
+	#	return self._char_request(self._CORP_TYPE,'contractBids', character_id)
+
+	#def corp_contract_items(self, character_id, contract_id):
+	#	self._params['contractID'] = self._join(contract_id)
+	#	return self._char_request(self._CORP_TYPE,'contractItems', character_id)
 
 	def corp_corporation_sheet(self, character_id):
 		return self._char_request(self._CORP_TYPE, 'corporationsheet', character_id)

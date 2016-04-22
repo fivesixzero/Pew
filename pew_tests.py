@@ -224,6 +224,22 @@ class PewCharacterTests(PewTest):
 		result = self.pew.char_contact_notifications(CHAR_ID)
 		self.assertHasMember(result, 'contactNotifications')
 
+	def test_char_contracts(self):
+
+		result = self.pew.char_contracts(CHAR_ID)
+		self.assertHasMember(result, 'contractList')
+
+	def test_char_contract_bids(self):
+
+		result = self.pew.char_contract_bids(CHAR_ID)
+		self.assertHasMember(result, 'bidList')
+
+	def test_char_contract_items(self):
+
+		pass # passing this because we need a contract ID to poke at items with :(
+		#result = self.pew.char_contract_items(CHAR_ID,CONTRACT_ID)
+		#self.assertHasMember(result, 'itemList')
+
 	def test_char_factional_warfare_statistics(self):
 
 		result = self.pew.char_factional_warfare_statistics(CHAR_ID)
@@ -437,6 +453,22 @@ class PewCorpTests(PewTest):
 
 		result = self.pewCorp.corp_contact_list(CHAR_ID_CORP)
 		self.assertHasMember(result, 'corporateContactList')
+
+	#def test_corp_contracts(self):
+	#
+	#	result = self.pew.corp_contracts(CHAR_ID)
+	#	self.assertHasMember(result, 'contractList')
+
+	#def test_corp_contract_bids(self):
+	#
+	#	result = self.pew.corp_contract_bids(CHAR_ID)
+	#	self.assertHasMember(result, 'bidList')
+
+	#def test_corp_contract_items(self):
+	#
+	#	pass # passing this because we need a contract ID to poke at items with :(
+	#	#result = self.pew.corp_contract_items(CHAR_ID,CONTRACT_ID)
+	#	#self.assertHasMember(result, 'itemList')
 
 	def test_corp_factional_warfare_statistics(self):
 
