@@ -89,11 +89,16 @@
 from urllib import urlencode
 from urllib2 import urlopen, URLError
 import xml.etree.ElementTree as ET
+import re
 
 class PewApiObject(object):
+	"""pew API object"""
 
 	def __init__(self):
 		pass
+
+	def __repr__(self):
+		return 'PEW API Object: {}'.format([l for l in dir(self) if re.match('[^_][^_].*',l)])
 
 class PewError(Exception):
 
@@ -124,6 +129,7 @@ class PewConnectionError(PewError):
 		super(PewConnectionError, self).__init__(error)
 
 class Pew(object):
+	"""pew object"""
 
 	_API_TYPE = 'api'
 	_CORP_TYPE = 'corp'
@@ -132,15 +138,20 @@ class Pew(object):
 	_MAPS_TYPE = 'map'
 	_EVE_TYPE = 'eve'
 
-	def __init__(self, api_id = None, api_key = None):
+	def __init__(self, api_id = None, api_key = None, api_nickname = None):
 
 		self.api_id = api_id
 		self.api_key = api_key
+		self.api_nickname = api_nickname
 		self.api_url = 'https://api.eveonline.com'
 		self.emd_url = 'http://eve-marketdata.com/api'
 		self.emd_charname = 'demo' # maybe dynamically get this in the future?
 		self.ecent_url = 'http://api.eve-central.com/api'
 		self._params = {}
+
+	def __repr__(self):
+
+		return 'PEW Nickname: {}'.format(self.api_nickname)
 
 	# Request methods.
 
