@@ -49,7 +49,7 @@
 #  - Initial release
 #
 # Todos:
-#  - Add character / corp / alliance image method (server down at time of writing)
+#  - Add character / corp / alliance image method
 #  - Add (optional?) caching to match timeouts in API doc (maybe in raw_request?)
 #  - Figure out a way to properly test the char_contracts_items function
 #  - Fix broken endpoints
@@ -271,6 +271,8 @@ class Pew(object):
 	# eve-marketdata.com API methods -- EXPERIMENTAL
 
 	def emd_item_prices(self, buysell, type_ids, marketgroup_ids = None, region_ids = None, solarsystem_ids = None, station_ids = None):
+		"""Eve-Marketdata item prices
+		INPUT: buysell flag (b = buy/s = sell/a = all), type_ids, marketgroup_ids, region_ids, solarsystem_ids, station_ids"""
 		self._params['buysell'] = buysell
 		self._params['type_ids'] = self._join(type_ids)
 		if marketgroup_ids is not None:
@@ -285,6 +287,8 @@ class Pew(object):
 
 	# usage: emd = emd_item_orders('b' os 's' or 'a', region_ids list or None, solarsystem_ids or None, station_ids or None)
 	def emd_item_orders(self, buysell, minmax, type_ids, marketgroup_ids = None, region_ids = None, solarsystem_ids = None, station_ids = None):
+		"""Eve-Marketdata item prices
+		INPUT: buysell flag (b = buy/s = sell/a = all), type_ids, marketgroup_ids, region_ids, solarsystem_ids, station_ids"""
 		self._params['buysell'] = buysell
 		self._params['minmax'] = minmax
 		self._params['type_ids'] = self._join(type_ids)
@@ -427,6 +431,7 @@ class Pew(object):
 	def corp_container_log(self, character_id):
 		return self._char_request(self._CORP_TYPE, 'containerlog', character_id)
 
+	# these haven't been working properly - need to investigate later
 	#def corp_contracts(self, character_id, contract_id = None):
 	#	self._params['contractID'] = self._join(contract_id)
 	#	return self._char_request(self._CORP_TYPE,'contracts', character_id)
